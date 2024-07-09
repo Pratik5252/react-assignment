@@ -1,51 +1,36 @@
 import React, { useState } from "react";
 import Logo from "../assets/Logo.png";
-import { Link, useNavigate } from "react-router-dom";
+import { json, Link, useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [email, setEmail] = useState();
-  const [password, setPassword] = useState();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   // const [confirmPassword, setConfirmPassord] = useState();
-  const [message, setMessage] = useState();
+  const [message, setMessage] = useState("");
 
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
 
-    if (!email || !password) {
-      setMessage("All fields are required");
-
-      return;
-    }
-
-    // if (password !== confirmPassword) {
-    //   setMessage("Password do not match");
-
-    //   return;
-    // }
-    try {
-      const response = await fetch("http://localhost:3000/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
-      const data = await response.json();
-      if (response.ok) {
-        setMessage(data.message || "Login Successful");
-        console.log(data);
-        navigate("/problems");
-      } else {
-        setMessage(data.message || "Login Failed");
-      }
-    } catch (error) {
-      setMessage("Error");
-      console.error("Error : ", error);
+    const response = await fetch("http://localhost:3000/login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        email: email,
+        password: password,
+      }),
+    });
+    const data = await response.json();
+    localStorage.setItem("token", data.token);
+    if (response.ok) {
+      setMessage("Login Successful");
+      console.log(data);
+      navigate("/");
+    } else {
+      setMessage(data.error || "Login Failed");
     }
   };
   return (
@@ -56,6 +41,7 @@ const Login = () => {
           <p>NeetCode</p>
         </div>
         <div className="pt-6">
+          <div>{message && <p>{message}</p>}</div>
           <form action="sumbit" className="flex flex-col gap-6">
             <div className="px-4 py-2 border-[0.5px] pr-24 rounded-sm">
               <input
@@ -63,6 +49,8 @@ const Login = () => {
                 placeholder="Email"
                 required
                 className=" outline-none text-sm text-left"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
               />
             </div>
             <div className="px-4 py-2 border-[0.5px] pr-24 rounded-sm">
@@ -71,6 +59,8 @@ const Login = () => {
                 placeholder="Password"
                 required
                 className="outline-none text-sm text-left"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
           </form>

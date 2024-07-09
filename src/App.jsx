@@ -6,7 +6,9 @@ import { Router, BrowserRouter, Routes, Route, Link } from "react-router-dom";
 import Login from "./components/Login";
 import Signup from "./components/Signup";
 import Problems from "./components/Problems";
-// import ProblemDetails from "./components/ProblemDetails";
+import Home from "./components/Home";
+import Navbar from "./components/Navbar";
+import ProblemDetails from "./components/ProblemDetails";
 
 function App() {
   /* Add routing here, routes look like -
@@ -18,11 +20,13 @@ function App() {
 
   return (
     <BrowserRouter>
+      <Navbar />
       <Routes>
-        <Route path="/" element={<Login />} />
+        <Route index path="/" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-        <Route path="/problems" element={<Problems />} />
-        {/* <Route path="/problems/:problem_slug" element={<ProblemDetails />} /> */}
+        <Route path="/problems/all/" element={<Problems />} />
+        <Route path="/problems/:id" element={<ProblemDetails />} />
       </Routes>
     </BrowserRouter>
   );

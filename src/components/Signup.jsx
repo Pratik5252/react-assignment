@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Logo from "../assets/Logo.png";
 import { Link, useNavigate } from "react-router-dom";
+import Navbar from "./Navbar";
 
 const Signup = () => {
   const [email, setEmail] = useState();
@@ -31,18 +32,18 @@ const Signup = () => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email,
-          password,
-          confirmPassword,
+          email: email,
+          password: password,
+          confirmPassword: confirmPassword,
         }),
       });
-      localStorage.setItem("email", email);
-      localStorage.setItem("password", password);
+      // localStorage.setItem("email", email);
+      // localStorage.setItem("password", password);
       const data = await response.json();
       if (response.ok) {
         setMessage(data.message || "Signup Successful");
         console.log(data);
-        navigate("/");
+        navigate("/login");
       } else {
         setMessage(data.message || "Signup Failed");
       }
@@ -54,6 +55,7 @@ const Signup = () => {
 
   return (
     <div className="flex flex-col m-auto items-center justify-center h-screen">
+      {/* <Navbar /> */}
       <div className="border-[0.5px] w-fit px-6 py-6 rounded-sm shadow-md">
         <div className="flex flex-col justify-center items-center">
           <img src={Logo} alt="NeetCode logo" />
